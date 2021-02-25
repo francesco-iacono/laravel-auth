@@ -26,10 +26,6 @@
         <input type="text" class="form-control" name="subtitle" id="subtitle" placeholder="Sottotitolo" value="{{ old('subtitle') }}">
       </div>
       <div class="form-group">
-        <label for="author">Autore</label>
-        <input type="text" class="form-control" name="author" id="author" placeholder="Autore" value="{{ old('author') }}">
-      </div>
-      <div class="form-group">
         <label for="text">Testo</label>
         <textarea class="form-control" name="text" id="text" rows="10">{{ old('text') }}</textarea>
       </div>

@@ -35,7 +35,7 @@
             <td>{{ substr($post->title, 0, 30) }}</td>
             <td>{{ substr($post->slug, 0, 30) }}</td>
             <td>{{ substr($post->subtitle, 0, 30) }}</td>
-            <td>{{ $post->author }}</td>
+            <td>{{ $post->user->name }}</td>
             <td>{{ substr($post->text, 0, 30) }}</td>
             <td>  
               <img src="{{ $post->img_path }}" alt="{{ $post->title }}">

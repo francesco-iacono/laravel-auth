@@ -19,6 +19,9 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::get('/posts', 'PostController@index')->name('posts.index');
+
+
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::prefix('admin') // prefisso rotte
