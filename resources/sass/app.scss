@@ -1,0 +1,29 @@
+// Fonts awesome
+@import '~@fortawesome/fontawesome-free/css/all.css';
+
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+
+// Variables
+@import 'variables';
+
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
+
+.index-posts {
+  img {
+    width: 100px;
+  }
+}
+
+.show-blog {
+  img {
+    width: 100%;
+  }
+}
+
+.images-form {
+  img {
+    width: 60px;
+  }
+}
