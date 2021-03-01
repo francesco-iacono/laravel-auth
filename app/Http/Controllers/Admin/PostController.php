@@ -8,9 +8,19 @@ use App\Post;
 use App\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use App\Mail\PostMail;
+use Illuminate\Support\Facades\Mail;
+
 
 class PostController extends Controller
 {
+/*     private $postValidation = [
+        'title'  => 'required|max:150',
+        'subtitle' => 'required|max:100',
+        'img_path' => 'mimes:jpeg,jpg,png',
+        'publication_date' => 'required|date'
+    ]; */
     /**
      * Display a listing of the resource.
      *
@@ -41,24 +51,30 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
+
+        /* dd($data); */
         
         $request->validate(
-            [
-                'title'  => 'required|max:150',
-                'subtitle' => 'required|max:100',
-                'img_path' => 'required|string|max:255',
-                'publication_date' => 'required|date'
+        [ 
+            'title'  => 'required|max:150',
+            'subtitle' => 'required|max:100',
+            'img_path' => 'mimes:jpeg,jpg,png',
+            'publication_date' => 'required|date'
         ]);
         // creazione e salvataggio del post
         $post = new Post();
         $data['slug'] = Str::slug($data['title']);
         $data['user_id'] = Auth::id();
+        $data["img_path"] = Storage::disk('public')->put('images', $data["img_path"]);
         $post->fill($data);
         $postSaveResult = $post->save();
 
-        return redirect()
+        if($postSaveResult) {
+            Mail::to('pippo@gmail.com')->send(new PostMail($post));
+            return redirect()
                 ->route('admin.posts.index')
                 ->with('message', 'Post ' . $post->title . ' creato correttamente!');
+        }
     }
 
     /**
@@ -78,9 +94,9 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Post $post)
     {
-        //
+        return view('admin.posts.edit', compact('post'));
     }
 
     /**
@@ -90,9 +106,26 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Post $post)
     {
-        //
+        $data = $request->all();
+        $data['slug'] = Str::slug($data['title']);
+       /*  $data["img_path"] = Storage::disk('public')->put('images', $data["img_path"]); */
+
+
+        $request->validate(
+            [ 
+                'title'  => 'required|max:150',
+                'subtitle' => 'required|max:100',
+                'img_path' => 'mimes:jpeg,jpg,png',
+                'publication_date' => 'required|date'
+        ]);
+
+        $post->update($data);
+
+        return redirect()
+        ->route('admin.posts.index')
+        ->with('message', 'Post' . $post->title . ' aggiornato correttamente!');
     }
 
     /**
@@ -101,8 +134,12 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Post $post)
     {
-        //
+        $post->delete();
+        /* dd($post); */
+        return redirect()
+        ->route('admin.posts.index')
+        ->with('message', 'Il post '. $post->title .  ' è stata cancellato correttamente!');
     }
 }

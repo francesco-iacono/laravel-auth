@@ -38,7 +38,7 @@
             <td>{{ $post->user->name }}</td>
             <td>{{ substr($post->text, 0, 30) }}</td>
             <td>  
-              <img src="{{ $post->img_path }}" alt="{{ $post->title }}">
+              <img src="{{ asset('storage/' . $post->img_path) }}" alt="{{ $post->title }}">
             </td>
             <td>{{ $post->publication_date }}</td>
             <td>{{ $post->created_at }}</td>
